@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableDynamoDBRepositories
-    (basePackages = "com.javatodev.api.repository")
+    (basePackages = "at.aau.project.weatherawsbackendreporter.repository")
 public class DynamoDBConfig {
 
     @Value("${amazon.dynamodb.endpoint}")

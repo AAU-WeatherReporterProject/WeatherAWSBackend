@@ -2,7 +2,6 @@ package at.aau.project.weatherawsbackendreporter;
 
 import at.aau.project.weatherawsbackendreporter.entity.Measurement;
 import at.aau.project.weatherawsbackendreporter.entity.TemperatureMeasurementPoint;
-import at.aau.project.weatherawsbackendreporter.model.MeasurementPoint;
 import at.aau.project.weatherawsbackendreporter.repository.MeasurementRepository;
 import at.aau.project.weatherawsbackendreporter.repository.TemperatureMeasurementPointRepository;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping(value = "/testrun")
+@RequestMapping(value = "/testdata")
 @RequiredArgsConstructor
 public class TestController {
 
