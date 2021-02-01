@@ -1,0 +1,80 @@
+plugins {
+    id 'org.springframework.boot' version '2.4.1'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
+    id 'checkstyle'
+
+    id "com.palantir.docker" version "0.22.1"
+    id "com.palantir.docker-run" version "0.22.1"
+
+    id "org.sonarqube" version "3.0"
+}
+
+group = 'at.aau.project'
+version = '0.0.2'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.jetbrains:annotations:20.1.0'
+    compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation:'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Spring API for Dynamo DB
+    implementation 'com.amazonaws:aws-java-sdk-dynamodb:1.11.892'
+    implementation 'com.github.derjust:spring-data-dynamodb:5.1.0'
+
+    runtimeOnly 'com.h2database:h2'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+checkstyle {
+    toolVersion = "8.38"
+    checkstyleTest.enabled = false
+}
+
+docker {
+    dependsOn build
+
+    name "docker.pkg.github.com/aau-weatherreporterproject/weatherreporterbackend/${project.name}:${project.version}"
+    files bootJar.archivePath
+    buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
+}
+
+dockerRun {
+    name "${project.name}"
+    image "${project.name}:${project.version}"
+    ports '8098:8098'
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "AAU-WeatherReporterProject_WeatherReporterBackend"
+        property "sonar.organization", "aau-weatherreporterproject"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
